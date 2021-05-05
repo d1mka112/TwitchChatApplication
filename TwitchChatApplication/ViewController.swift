@@ -92,6 +92,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     //ToDo:
     /*
         -add restriction of size of array
+        -add something
     */
      
     func onChatMessage(_ message: String) {
