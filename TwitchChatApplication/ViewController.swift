@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectionDelegate, UITableViewDelegate, UITableViewDataSource {
-    
+    let numberOfMessagesInArray: Int = 1000
     
     @IBOutlet weak var channelNameLabel: UILabel!
     
@@ -83,7 +83,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         cell.textLabel?.attributedText = nicknameString
         //cell.textLabel!.text = "\(message.nickname): \(message.message)"
         
-        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 16.0)
+        //cell.textLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 16.0)
         cell.textLabel?.numberOfLines = 0
         
         return cell
@@ -98,7 +98,14 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         
         let chatMessage = TwitchChatMessage(rawMessage: message)
         
-        self.arrayOfChatMessages.append(chatMessage)
+        if(arrayOfChatMessages.count > numberOfMessagesInArray)
+        {
+            self.arrayOfChatMessages.removeFirst()
+            self.arrayOfChatMessages.append(chatMessage)
+        }
+        else{
+            self.arrayOfChatMessages.append(chatMessage)
+        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
