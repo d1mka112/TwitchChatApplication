@@ -58,7 +58,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
 
         twitchChat.readMessage()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
             twitchChat.willRead = false
         }
         // Do any additional setup after loading the view.
@@ -72,8 +72,21 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath)
         let message = arrayOfChatMessages[indexPath.row]
         
-        cell.textLabel!.text = "\(message.nickname): \(message.message)"
-//        cell.detailTextLabel!.text = "\(message.rawMessage)"
+        let nicknameText = message.nickname
+        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16)]
+        let nicknameString = NSMutableAttributedString(string: nicknameText, attributes: attrs)
+        
+        let messageText = ": \(message.message)"
+        let attrs2 = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16.0)]
+        let messageString = NSMutableAttributedString(string: messageText, attributes: attrs2)
+        
+        nicknameString.append(messageString)
+        
+        cell.textLabel?.attributedText = nicknameString
+        //cell.textLabel!.text = "\(message.nickname): \(message.message)"
+        
+        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 16.0)
+        cell.textLabel?.numberOfLines = 0
         
         return cell
     }
