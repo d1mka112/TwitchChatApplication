@@ -8,17 +8,50 @@
 import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectionDelegate, UITableViewDelegate, UITableViewDataSource {
-    let numberOfMessagesInArray: Int = 1000
-    
     @IBOutlet weak var channelNameLabel: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
     
+    
+    
+    @IBOutlet var listeningButton: UIButton!
+    let numberOfMessagesInArray: Int = 1000
+    
     var arrayOfChatMessages: [TwitchChatMessage] = []
     
+    var twitchChat: TwitchChatConnection!
+    
+    @IBAction func listeningButtonTouched() {
+        if self.twitchChat.willRead {
+            self.listeningButton.titleLabel!.text = "Start Listening"
+            self.twitchChat.stopListening()
+        }
+        else {
+            self.listeningButton.titleLabel!.text = "Stop Listening
+            self.twitchChat.startListening()
+        }
+            
+    }
+    
+    func initListeningButton () {
+        let button = UIButton()
+        
+        button.addTarget(self, action: #selector(listeningButtonTouched), for: UIControl.Event.touchUpInside)
+        button.titleLabel!.text = "Start Listening"
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        let horizontalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+        let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: -15)
+        
+        self.view.addSubview(button)
+        self.listeningButton = button
+        self.view.addConstraints([horizontalConstraint, verticalConstraint])
+    }
     
     func initChannelNameLabelConstraints() {
         channelNameLabel.font = UIFont(name:"HelveticaNeue-Bold", size: 20.0)
+        
+        channelNameLabel.text = "channel"
         
         channelNameLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -41,24 +74,24 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initListeningButton()
         initChannelNameLabelConstraints()
         initTableViewConstraints()
         
         tableView.delegate = self
         tableView.dataSource = self
-        
-        let twitchChat = TwitchChatConnection()
 
+        twitchChat = TwitchChatConnection()
         twitchChat.delegate = self
 
         twitchChat.connectToTheServer()
-        twitchChat.connectToTheChatChannel(into: "dinablin")
-
+        twitchChat.connectToTheChatChannel(into: "modestal")
+/*
         twitchChat.startListening()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
-            twitchChat.stopListening()
-        }
+            self.twitchChat.stopListening()
+        }*/
         // Do any additional setup after loading the view.
     }
     
