@@ -50,16 +50,14 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         let twitchChat = TwitchChatConnection()
 
         twitchChat.delegate = self
-        
-        twitchChat.willRead = true
 
         twitchChat.connectToTheServer()
         twitchChat.connectToTheChatChannel(into: "dinablin")
 
-        twitchChat.readMessage()
+        twitchChat.startListening()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
-            twitchChat.willRead = false
+            twitchChat.stopListening()
         }
         // Do any additional setup after loading the view.
     }
@@ -91,7 +89,13 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         return cell
     }
     
+    //ToDo:
+    /*
+        -add restriction of size of array
+    */
+     
     func onChatMessage(_ message: String) {
+        
         let chatMessage = TwitchChatMessage(rawMessage: message)
         
         self.arrayOfChatMessages.append(chatMessage)

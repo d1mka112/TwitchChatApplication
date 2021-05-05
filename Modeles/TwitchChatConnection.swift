@@ -86,6 +86,15 @@ class TwitchChatConnection {
         delegate?.onChatMessage(message)
     }
     
+    func startListening() {
+        self.willRead = true
+        self.readMessage()
+    }
+    
+    func stopListening() {
+        self.willRead = false
+    }
+    
     func readMessage() {
         webSocketTask.receive { (result) in
             switch result {
