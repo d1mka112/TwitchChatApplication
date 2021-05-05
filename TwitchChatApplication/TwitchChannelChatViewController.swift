@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectionDelegate, UITableViewDelegate, UITableViewDataSource {
+class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectionDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var channelNameLabel: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
@@ -15,6 +15,8 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     
     
     @IBOutlet var listeningButton: UIButton!
+    @IBOutlet var messageTextField: UITextField!
+    
     let numberOfMessagesInArray: Int = 100
     
     var arrayOfChatMessages: [TwitchChatMessage] = []
@@ -35,22 +37,36 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     
     func initListeningButton () {
         let button = UIButton()
+        let textField = UITextField()
         
         button.addTarget(self, action: #selector(listeningButtonTouched), for: UIControl.Event.touchUpInside)
         button.setTitle("Start Listening", for: .normal)
         button.backgroundColor = .blue
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        //button.isEnabled = false
+        
+        textField.placeholder = "Text a message"
+        textField.translatesAutoresizingMaskIntoConstraints = false
+
         
         let horizontalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-        let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: -15)
+        let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: -50)
         let width = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
-        let height = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30)
+        let height = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 50)
+        
+        let leadingConstraintTF = NSLayoutConstraint(item: textField, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1, constant: 50)
+        let trailingConstraintTF = NSLayoutConstraint(item: textField, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1, constant: -50)
+        let bottomConstrainTF = NSLayoutConstraint(item: textField, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 0)
+        let heightConstraintTF = NSLayoutConstraint(item: textField, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 50)
+        
         
         self.view.addSubview(button)
+        self.view.addSubview(textField)
+        
         self.listeningButton = button
-        self.view.addConstraints([horizontalConstraint, verticalConstraint, width, height])
+        self.messageTextField = textField
+        
+        self.view.addConstraints([horizontalConstraint, verticalConstraint, width, height, leadingConstraintTF, trailingConstraintTF, bottomConstrainTF, heightConstraintTF])
     }
     
     func initChannelNameLabelConstraints() {
@@ -119,9 +135,6 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         nicknameString.append(messageString)
         
         cell.textLabel?.attributedText = nicknameString
-        //cell.textLabel!.text = "\(message.nickname): \(message.message)"
-        
-        //cell.textLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 16.0)
         cell.textLabel?.numberOfLines = 0
         
         return cell

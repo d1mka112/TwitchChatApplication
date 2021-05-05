@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		048A14F9263466EE00F25A80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A14F8263466EE00F25A80 /* AppDelegate.swift */; };
 		048A14FB263466EE00F25A80 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A14FA263466EE00F25A80 /* SceneDelegate.swift */; };
-		048A14FD263466EE00F25A80 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A14FC263466EE00F25A80 /* ViewController.swift */; };
+		048A14FD263466EE00F25A80 /* TwitchChannelChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A14FC263466EE00F25A80 /* TwitchChannelChatViewController.swift */; };
 		048A1500263466EE00F25A80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048A14FE263466EE00F25A80 /* Main.storyboard */; };
 		048A1502263466F200F25A80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 048A1501263466F200F25A80 /* Assets.xcassets */; };
 		048A1505263466F200F25A80 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048A1503263466F200F25A80 /* LaunchScreen.storyboard */; };
@@ -20,7 +20,7 @@
 		048A14F5263466EE00F25A80 /* TwitchChatApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitchChatApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		048A14F8263466EE00F25A80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		048A14FA263466EE00F25A80 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		048A14FC263466EE00F25A80 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		048A14FC263466EE00F25A80 /* TwitchChannelChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchChannelChatViewController.swift; sourceTree = "<group>"; };
 		048A14FF263466EE00F25A80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		048A1501263466F200F25A80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		048A1504263466F200F25A80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -61,7 +61,7 @@
 			children = (
 				048A14F8263466EE00F25A80 /* AppDelegate.swift */,
 				048A14FA263466EE00F25A80 /* SceneDelegate.swift */,
-				048A14FC263466EE00F25A80 /* ViewController.swift */,
+				048A14FC263466EE00F25A80 /* TwitchChannelChatViewController.swift */,
 				048A14FE263466EE00F25A80 /* Main.storyboard */,
 				048A1501263466F200F25A80 /* Assets.xcassets */,
 				048A1503263466F200F25A80 /* LaunchScreen.storyboard */,
@@ -148,7 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				048A14FD263466EE00F25A80 /* ViewController.swift in Sources */,
+				048A14FD263466EE00F25A80 /* TwitchChannelChatViewController.swift in Sources */,
 				048A14F9263466EE00F25A80 /* AppDelegate.swift in Sources */,
 				048A150F263469B600F25A80 /* TwitchChatConnection.swift in Sources */,
 				048A14FB263466EE00F25A80 /* SceneDelegate.swift in Sources */,
