@@ -13,7 +13,7 @@
 		048A1500263466EE00F25A80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048A14FE263466EE00F25A80 /* Main.storyboard */; };
 		048A1502263466F200F25A80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 048A1501263466F200F25A80 /* Assets.xcassets */; };
 		048A1505263466F200F25A80 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048A1503263466F200F25A80 /* LaunchScreen.storyboard */; };
-		048A150F263469B600F25A80 /* IRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A150E263469B600F25A80 /* IRC.swift */; };
+		048A150F263469B600F25A80 /* IRCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A150E263469B600F25A80 /* IRCClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		048A1501263466F200F25A80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		048A1504263466F200F25A80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		048A1506263466F200F25A80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		048A150E263469B600F25A80 /* IRC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IRC.swift; sourceTree = "<group>"; };
+		048A150E263469B600F25A80 /* IRCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IRCClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +73,7 @@
 		048A150D263469A700F25A80 /* Modeles */ = {
 			isa = PBXGroup;
 			children = (
-				048A150E263469B600F25A80 /* IRC.swift */,
+				048A150E263469B600F25A80 /* IRCClient.swift */,
 			);
 			path = Modeles;
 			sourceTree = "<group>";
@@ -150,7 +150,7 @@
 			files = (
 				048A14FD263466EE00F25A80 /* ViewController.swift in Sources */,
 				048A14F9263466EE00F25A80 /* AppDelegate.swift in Sources */,
-				048A150F263469B600F25A80 /* IRC.swift in Sources */,
+				048A150F263469B600F25A80 /* IRCClient.swift in Sources */,
 				048A14FB263466EE00F25A80 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
