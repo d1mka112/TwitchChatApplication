@@ -67,6 +67,7 @@ class TwitchChatConnection {
     }
     func connectToTheChatChannel(into channel: String) {
         self.sendMessage("JOIN #\(channel)")
+        self.channel = channel
     }
     
     func sendMessageToTheChat(_ message: String) {
@@ -79,9 +80,8 @@ class TwitchChatConnection {
     }
     
     func onServerMessage(_ message: String) {
-        if(message.contains(":\(nickname).tmi.twitch.tv 366 \(nickname) #\(channel) :End of /NAMES list")) {
+        if(message.contains("\(channel)")) {
             delegate?.onJoinChannel(channel)
-            //is that normal?
         }
         delegate?.onChatMessage(message)
     }

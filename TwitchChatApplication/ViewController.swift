@@ -17,6 +17,16 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     var arrayOfChatMessages: [TwitchChatMessage] = []
     
     
+    func initChannelNameLabelConstraints() {
+        channelNameLabel.font = UIFont(name:"HelveticaNeue-Bold", size: 20.0)
+        
+        channelNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let horizontalConstraint = NSLayoutConstraint(item: channelNameLabel!, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+        let verticalConstraint = NSLayoutConstraint(item: channelNameLabel!, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 20)
+        view.addConstraints([horizontalConstraint, verticalConstraint])
+    }
+    
     func initTableViewConstraints() {
         tableView.backgroundColor = UIColor.init(red: 0.968, green: 0.968, blue: 0.972, alpha: 0.0)
         tableView.separatorStyle = .none
@@ -31,6 +41,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initChannelNameLabelConstraints()
         initTableViewConstraints()
         
         tableView.delegate = self
@@ -43,7 +54,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         twitchChat.willRead = true
 
         twitchChat.connectToTheServer()
-        twitchChat.connectToTheChatChannel(into: "karavay46")
+        twitchChat.connectToTheChatChannel(into: "dinablin")
 
         twitchChat.readMessage()
 
@@ -78,7 +89,9 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     }
     
     func onJoinChannel(_ nameChannel: String) {
-        self.channelNameLabel.text = nameChannel
+        DispatchQueue.main.async {
+            self.channelNameLabel.text = nameChannel
+        }
     }
 
 
