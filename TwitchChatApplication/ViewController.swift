@@ -15,7 +15,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     
     
     @IBOutlet var listeningButton: UIButton!
-    let numberOfMessagesInArray: Int = 1000
+    let numberOfMessagesInArray: Int = 100
     
     var arrayOfChatMessages: [TwitchChatMessage] = []
     
@@ -40,6 +40,8 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         button.setTitle("Start Listening", for: .normal)
         button.backgroundColor = .blue
         button.translatesAutoresizingMaskIntoConstraints = false
+        
+        //button.isEnabled = false
         
         let horizontalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
         let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: -15)
@@ -134,23 +136,31 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         
         let chatMessage = TwitchChatMessage(rawMessage: message)
         
-        if(arrayOfChatMessages.count > numberOfMessagesInArray)
+        var tempArray = self.arrayOfChatMessages
+        
+        if(tempArray.count >= numberOfMessagesInArray)
         {
-            self.arrayOfChatMessages.removeFirst()
-            self.arrayOfChatMessages.append(chatMessage)
+            tempArray.removeFirst()
+            tempArray.append(chatMessage)
         }
         else{
-            self.arrayOfChatMessages.append(chatMessage)
+            tempArray.append(chatMessage)
         }
+        let count = tempArray.count - 1
+        self.arrayOfChatMessages = tempArray
         DispatchQueue.main.async {
+            
             self.tableView.reloadData()
-            self.tableView.scrollToRow(at: IndexPath(row: self.arrayOfChatMessages.count-1, section: 0), at: UITableView.ScrollPosition.bottom, animated: true)
+            if(tempArray.count > 10) {
+                self.tableView.scrollToRow(at: IndexPath(row: count, section: 0), at: UITableView.ScrollPosition.bottom, animated: true)
+            }
         }
         
     }
     
     func onJoinChannel(_ nameChannel: String) {
         DispatchQueue.main.async {
+            //self.listeningButton.isEnabled = true
             self.channelNameLabel.text = nameChannel
         }
     }
