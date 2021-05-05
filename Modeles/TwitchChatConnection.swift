@@ -108,7 +108,9 @@ class TwitchChatConnection {
                             return
                     }
                 case .failure(let error):
-                    print(error)
+                    if error.localizedDescription.contains("Socket is not connected") {
+                        print("Socket is not connected")
+                    }
             }
             if(self.willRead) {
                 self.readMessage()

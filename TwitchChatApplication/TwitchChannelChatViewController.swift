@@ -9,11 +9,7 @@ import UIKit
 
 class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectionDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var channelNameLabel: UILabel!
-    
     @IBOutlet weak var tableView: UITableView!
-    
-    
-    
     @IBOutlet var listeningButton: UIButton!
     @IBOutlet var messageTextField: UITextField!
     
@@ -43,7 +39,7 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         button.setTitle("Start Listening", for: .normal)
         button.backgroundColor = .blue
         button.translatesAutoresizingMaskIntoConstraints = false
-        
+        //button.isEnabled = false
         
         textField.placeholder = "Text a message"
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -70,15 +66,28 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     }
     
     func initChannelNameLabelConstraints() {
-        channelNameLabel.font = UIFont(name:"HelveticaNeue-Bold", size: 20.0)
+        let channelNameLabel = UILabel()
+
+        let blurEffect = UIBlurEffect(style: .extraLight)
+        let blurView = UIVisualEffectView(effect: blurEffect)
         
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        blurView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
+        
+        channelNameLabel.font = UIFont(name:"HelveticaNeue-Bold", size: 20.0)
         channelNameLabel.text = "channel"
         
         channelNameLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        let horizontalConstraint = NSLayoutConstraint(item: channelNameLabel!, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-        let verticalConstraint = NSLayoutConstraint(item: channelNameLabel!, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 20)
-        view.addConstraints([horizontalConstraint, verticalConstraint])
+        let horizontalConstraint = NSLayoutConstraint(item: channelNameLabel, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+        let verticalConstraint = NSLayoutConstraint(item: channelNameLabel, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 20)
+        
+        
+        self.view.addSubview(blurView)
+        
+        self.view.addSubview(channelNameLabel)
+        self.channelNameLabel = channelNameLabel
+        self.view.addConstraints([horizontalConstraint, verticalConstraint])
     }
     
     func initTableViewConstraints() {
@@ -91,8 +100,8 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         tableView.delegate = self
         tableView.dataSource = self
         
-        let topConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: channelNameLabel, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 20)
-        let bottomConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: listeningButton, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: -20)
+        let topConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.topMargin, multiplier: 1, constant: 0)
+        let bottomConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: listeningButton, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
         let leadingConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1, constant: 0)
         let trailingConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1, constant: 0)
         /*
@@ -109,8 +118,8 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     override func viewDidLoad() {
         super.viewDidLoad()
         initListeningButton()
-        initChannelNameLabelConstraints()
         initTableViewConstraints()
+        initChannelNameLabelConstraints()
         
         //tableView.delegate = self
         //tableView.dataSource = self
@@ -119,9 +128,10 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         twitchChat.delegate = self
 
         twitchChat.connectToTheServer()
-        twitchChat.connectToTheChatChannel(into: "modestal")
-/*
+        twitchChat.connectToTheChatChannel(into: "des0ut")
         twitchChat.startListening()
+/*
+        
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
             self.twitchChat.stopListening()
@@ -140,7 +150,7 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         
         let nicknameText = message.nickname
         // Nickname color/bold style/ and on and on
-        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor : UIColor.red]
+        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor : UIColor.blue]
         let nicknameString = NSMutableAttributedString(string: nicknameText, attributes: attrs)
         
         let messageText = ": \(message.message)"
@@ -151,15 +161,10 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         
         cell.textLabel?.attributedText = nicknameString
         cell.textLabel?.numberOfLines = 0
-        
+        //cell.detailTextLabel?.text = message.rawMessage
         return cell
     }
     
-    //ToDo:
-    /*
-        -add restriction of size of array
-    */
-     
     func onChatMessage(_ message: String) {
         
         let chatMessage = TwitchChatMessage(rawMessage: message)
