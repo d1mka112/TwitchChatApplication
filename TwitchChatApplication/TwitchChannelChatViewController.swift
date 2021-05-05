@@ -50,7 +50,7 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
 
         
         let horizontalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-        let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: -50)
+        let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: textField, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
         let width = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
         let height = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 50)
         
@@ -82,15 +82,28 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     }
     
     func initTableViewConstraints() {
+        let tableView = UITableView()
+        
         tableView.backgroundColor = UIColor.init(red: 0.968, green: 0.968, blue: 0.972, alpha: 0.0)
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        let topConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: channelNameLabel, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 20)
+        let bottomConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: listeningButton, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: -20)
+        let leadingConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1, constant: 0)
+        let trailingConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1, constant: 0)
+        /*
         let horizontalConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
         let verticalConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
         let widthConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
-        let heightConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.height, multiplier: 1, constant: -100)
-        view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
+        let heightConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.height, multiplier: 1, constant: -100)*/
+        
+        self.view.addSubview(tableView)
+        self.tableView = tableView
+        self.view.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
     }
     
     override func viewDidLoad() {
@@ -99,8 +112,8 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         initChannelNameLabelConstraints()
         initTableViewConstraints()
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        //tableView.delegate = self
+        //tableView.dataSource = self
 
         twitchChat = TwitchChatConnection()
         twitchChat.delegate = self
@@ -121,11 +134,13 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath)
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath)
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         let message = arrayOfChatMessages[indexPath.row]
         
         let nicknameText = message.nickname
-        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16)]
+        // Nickname color/bold style/ and on and on
+        let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor : UIColor.red]
         let nicknameString = NSMutableAttributedString(string: nicknameText, attributes: attrs)
         
         let messageText = ": \(message.message)"
