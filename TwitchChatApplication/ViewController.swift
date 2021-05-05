@@ -7,11 +7,78 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate {
-
+class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectionDelegate, UITableViewDelegate, UITableViewDataSource {
+    
+    
+    @IBOutlet weak var channelNameLabel: UILabel!
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var arrayOfChatMessages: [TwitchChatMessage] = []
+    
+    
+    func initTableViewConstraints() {
+        tableView.backgroundColor = UIColor.init(red: 0.968, green: 0.968, blue: 0.972, alpha: 0.0)
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let horizontalConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+        let verticalConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
+        let widthConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
+        let heightConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.height, multiplier: 1, constant: -100)
+        view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        initTableViewConstraints()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        let twitchChat = TwitchChatConnection()
+
+        twitchChat.delegate = self
+        
+        twitchChat.willRead = true
+
+        twitchChat.connectToTheServer()
+        twitchChat.connectToTheChatChannel(into: "karavay46")
+
+        twitchChat.readMessage()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            twitchChat.willRead = false
+        }
         // Do any additional setup after loading the view.
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return arrayOfChatMessages.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath)
+        let message = arrayOfChatMessages[indexPath.row]
+        
+        cell.textLabel!.text = "\(message.nickname): \(message.message)"
+//        cell.detailTextLabel!.text = "\(message.rawMessage)"
+        
+        return cell
+    }
+    
+    func onChatMessage(_ message: String) {
+        let chatMessage = TwitchChatMessage(rawMessage: message)
+        
+        self.arrayOfChatMessages.append(chatMessage)
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        
+    }
+    
+    func onJoinChannel(_ nameChannel: String) {
+        self.channelNameLabel.text = nameChannel
     }
 
 
