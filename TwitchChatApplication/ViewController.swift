@@ -23,11 +23,11 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
     
     @IBAction func listeningButtonTouched() {
         if self.twitchChat.willRead {
-            self.listeningButton.titleLabel!.text = "Start Listening"
+            self.listeningButton.setTitle("Start Listening", for: .normal)
             self.twitchChat.stopListening()
         }
         else {
-            self.listeningButton.titleLabel!.text = "Stop Listening
+            self.listeningButton.setTitle("Stop Listening", for: .normal)
             self.twitchChat.startListening()
         }
             
@@ -37,15 +37,18 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         let button = UIButton()
         
         button.addTarget(self, action: #selector(listeningButtonTouched), for: UIControl.Event.touchUpInside)
-        button.titleLabel!.text = "Start Listening"
+        button.setTitle("Start Listening", for: .normal)
+        button.backgroundColor = .blue
         button.translatesAutoresizingMaskIntoConstraints = false
         
         let horizontalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
         let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: -15)
+        let width = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
+        let height = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30)
         
         self.view.addSubview(button)
         self.listeningButton = button
-        self.view.addConstraints([horizontalConstraint, verticalConstraint])
+        self.view.addConstraints([horizontalConstraint, verticalConstraint, width, height])
     }
     
     func initChannelNameLabelConstraints() {
@@ -141,6 +144,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TwitchChatConnectio
         }
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            self.tableView.scrollToRow(at: IndexPath(row: self.arrayOfChatMessages.count-1, section: 0), at: UITableView.ScrollPosition.bottom, animated: true)
         }
         
     }
