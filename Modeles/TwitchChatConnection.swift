@@ -15,6 +15,7 @@ import Foundation
 protocol TwitchChatConnectionDelegate {
     func onChatMessage(_ message:String)
     func onJoinChannel(_ nameChannel:String)
+    
 }
 
 //this structure will set all the values of its own properties from the raw data itself

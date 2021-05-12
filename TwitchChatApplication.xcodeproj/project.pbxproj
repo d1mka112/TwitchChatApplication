@@ -14,6 +14,8 @@
 		048A1502263466F200F25A80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 048A1501263466F200F25A80 /* Assets.xcassets */; };
 		048A1505263466F200F25A80 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048A1503263466F200F25A80 /* LaunchScreen.storyboard */; };
 		048A150F263469B600F25A80 /* TwitchChatConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A150E263469B600F25A80 /* TwitchChatConnection.swift */; };
+		04D8BD1D26445D0800D8EE56 /* TwitchChatLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D8BD1C26445D0800D8EE56 /* TwitchChatLoginViewController.swift */; };
+		04D8BD2026445D1600D8EE56 /* TwitchChatLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D8BD1F26445D1600D8EE56 /* TwitchChatLogin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		048A1504263466F200F25A80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		048A1506263466F200F25A80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		048A150E263469B600F25A80 /* TwitchChatConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchChatConnection.swift; sourceTree = "<group>"; };
+		04D8BD1C26445D0800D8EE56 /* TwitchChatLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchChatLoginViewController.swift; sourceTree = "<group>"; };
+		04D8BD1F26445D1600D8EE56 /* TwitchChatLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchChatLogin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,7 @@
 				048A1501263466F200F25A80 /* Assets.xcassets */,
 				048A1503263466F200F25A80 /* LaunchScreen.storyboard */,
 				048A1506263466F200F25A80 /* Info.plist */,
+				04D8BD1C26445D0800D8EE56 /* TwitchChatLoginViewController.swift */,
 			);
 			path = TwitchChatApplication;
 			sourceTree = "<group>";
@@ -74,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				048A150E263469B600F25A80 /* TwitchChatConnection.swift */,
+				04D8BD1F26445D1600D8EE56 /* TwitchChatLogin.swift */,
 			);
 			path = Modeles;
 			sourceTree = "<group>";
@@ -148,9 +154,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04D8BD2026445D1600D8EE56 /* TwitchChatLogin.swift in Sources */,
 				048A14FD263466EE00F25A80 /* TwitchChannelChatViewController.swift in Sources */,
 				048A14F9263466EE00F25A80 /* AppDelegate.swift in Sources */,
 				048A150F263469B600F25A80 /* TwitchChatConnection.swift in Sources */,
+				04D8BD1D26445D0800D8EE56 /* TwitchChatLoginViewController.swift in Sources */,
 				048A14FB263466EE00F25A80 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

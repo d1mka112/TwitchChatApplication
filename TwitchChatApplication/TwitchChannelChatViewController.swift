@@ -19,6 +19,8 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     
     var twitchChat: TwitchChatConnection!
     
+    var channelName = "lana_lux"
+    
     @IBAction func listeningButtonTouched() {
         if self.twitchChat.willRead {
             self.listeningButton.setTitle("Start Listening", for: .normal)
@@ -104,11 +106,6 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         let bottomConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: listeningButton, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
         let leadingConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1, constant: 0)
         let trailingConstraint = NSLayoutConstraint(item: tableView, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1, constant: 0)
-        /*
-        let horizontalConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-        let verticalConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
-        let widthConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
-        let heightConstraint = NSLayoutConstraint(item: tableView!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.height, multiplier: 1, constant: -100)*/
         
         self.view.addSubview(tableView)
         self.tableView = tableView
@@ -120,23 +117,13 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         initListeningButton()
         initTableViewConstraints()
         initChannelNameLabelConstraints()
-        
-        //tableView.delegate = self
-        //tableView.dataSource = self
 
         twitchChat = TwitchChatConnection()
         twitchChat.delegate = self
 
         twitchChat.connectToTheServer()
-        twitchChat.connectToTheChatChannel(into: "des0ut")
+        twitchChat.connectToTheChatChannel(into: channelName)
         twitchChat.startListening()
-/*
-        
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
-            self.twitchChat.stopListening()
-        }*/
-        // Do any additional setup after loading the view.
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -144,24 +131,24 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath)
+        
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         let message = arrayOfChatMessages[indexPath.row]
         
         let nicknameText = message.nickname
+        
         // Nickname color/bold style/ and on and on
         let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor : UIColor.blue]
-        let nicknameString = NSMutableAttributedString(string: nicknameText, attributes: attrs)
+        let messageString = NSMutableAttributedString(string: nicknameText, attributes: attrs)
         
         let messageText = ": \(message.message)"
         let attrs2 = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16.0)]
-        let messageString = NSMutableAttributedString(string: messageText, attributes: attrs2)
+        let msgString = NSMutableAttributedString(string: messageText, attributes: attrs2)
         
-        nicknameString.append(messageString)
+        messageString.append(msgString)
         
-        cell.textLabel?.attributedText = nicknameString
+        cell.textLabel?.attributedText = messageString
         cell.textLabel?.numberOfLines = 0
-        //cell.detailTextLabel?.text = message.rawMessage
         return cell
     }
     
