@@ -18,7 +18,7 @@ class TwitchChatLoginViewController: UIViewController {
         button.backgroundColor = .purple
         button.setTitleColor(UIColor.white, for: .normal)
         button.setTitleColor(UIColor.gray, for: .highlighted)
-
+        
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         
