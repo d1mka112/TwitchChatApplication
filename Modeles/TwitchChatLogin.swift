@@ -18,7 +18,7 @@ class TwitchChatLogin {
     
     let requestParameters: [String : String] = [
         "client_id" : "63xnlr28umdtqdi5sys8i15nkk87ot",
-        "redirect_uri" : "https://localhost",
+        "redirect_uri" : "https://localhost/",
         "response_type": "token",
         "scope" : "chat:read+chat:edit+channel:moderate+whispers:read+whispers:edit+channel_editor"
     ]
@@ -29,6 +29,22 @@ class TwitchChatLogin {
     
     init() {
         self.data = Data()
+    }
+    
+    func getRequset () -> URLRequest {
+        var parameters = "?"
+        
+        for key in requestParameters.keys {
+            parameters += "\(key)=\(requestParameters[key]!)&"
+        }
+        
+        let mainUrl = URL(string: mainUrlString+parameters)!
+
+        var Request = URLRequest(url: mainUrl)
+        
+        Request.httpMethod = "GET"
+        
+        return Request
     }
     
     func oAuthRequest () {

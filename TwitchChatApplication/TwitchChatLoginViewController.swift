@@ -32,15 +32,30 @@ class TwitchChatLoginViewController: UIViewController {
         self.view.addConstraints([horizontalConstraint, verticalConstraint])
     }
     
-    func initWebView(_ string: String) {
-        let webView = WKWebView()
-        webView.loadHTMLString(string, baseURL: nil)
+    func initWebView(_ url: URLRequest) {
+        //DispatchQueue.main.async {
+            let webView = WKWebView()
+            webView.backgroundColor = UIColor.black
+            
+            webView.translatesAutoresizingMaskIntoConstraints = false
+
+            let horizontalConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+            let verticalConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
+            let widthConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
+            let heightConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.height, multiplier: 0.5, constant: 0)
+            self.view.addSubview(webView)
+            self.view.addConstraints([horizontalConstraint, verticalConstraint, heightConstraint, widthConstraint])
+            
+            webView.load(url)
+            webView.sizeToFit()            
+        //}
     }
     
     @IBAction func loginButtonTouched(){
         let loginRequest = TwitchChatLogin()
-        loginRequest.delegate = self
-        loginRequest.oAuthRequest()
+        /*loginRequest.delegate = self
+        loginRequest.oAuthRequest()*/
+        initWebView(loginRequest.getRequset())
     }
     
     override func viewDidLoad() {
@@ -66,6 +81,20 @@ class TwitchChatLoginViewController: UIViewController {
 extension TwitchChatLoginViewController: TwitchChatLoginDelegate {
     func OnMessage(_ data: Data) {
         let newString = String(data: data, encoding: .utf8)!
-        self.initWebView(newString)
+        print(newString)
+        //self.initWebView(newString)
+    }
+}
+
+extension URL {
+    subscript(queryParam:String) -> String? {
+        guard let url = URLComponents(string: self.absoluteString) else { return nil }
+        return url.queryItems?.first(where: { $0.name == queryParam })?.value
+    }
+}
+
+extension TwitchChatLoginViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        
     }
 }
