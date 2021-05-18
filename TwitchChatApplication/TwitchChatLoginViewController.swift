@@ -99,7 +99,8 @@ class TwitchChatLoginViewController: UIViewController {
 extension TwitchChatLoginViewController: WebAuthViewDelegate {
     func AccessTokenDidGet(_ acessToken: String) {
         self.accessToken = acessToken
-        label.text = "oauth:\(acessToken)"
+        label.text = acessToken
+        // TODO: Fix the problem of memory overflow!!!
         
         let vc = TwitchChannelChatViewController()
         vc.accessToken = acessToken
