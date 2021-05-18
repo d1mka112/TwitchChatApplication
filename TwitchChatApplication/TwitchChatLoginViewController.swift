@@ -99,7 +99,7 @@ class TwitchChatLoginViewController: UIViewController {
 extension TwitchChatLoginViewController: WebAuthViewDelegate {
     func AccessTokenDidGet(_ acessToken: String) {
         self.accessToken = acessToken
-        label.text = acessToken
+        label.text = "oauth:\(acessToken)"
         //print("TwitchChatLoginViewContorller \(acessToken)")
     }
 }
