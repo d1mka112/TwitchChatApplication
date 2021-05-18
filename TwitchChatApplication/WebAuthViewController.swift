@@ -6,25 +6,36 @@
 //
 
 import UIKit
+import WebKit
 
 class WebAuthViewController: UIViewController {
 
-
+    private let webView: WKWebView = {
+        let preferences = WKWebpagePreferences()
+        preferences.allowsContentJavaScript = true
+        
+        let configuration = WKWebViewConfiguration()
+        configuration.defaultWebpagePreferences = preferences
+        
+        let webView = WKWebView(frame: .zero, configuration: configuration)
+        
+        return webView
+    }()
+    
+    var URLRequest: URLRequest?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Twitch Authorization"
 
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .systemBackground
+        view.addSubview(webView)
+        guard (webView.load(URLRequest!) != nil) else {
+            dismiss(animated: true, completion: nil)
+            return
+        }
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
+
+
