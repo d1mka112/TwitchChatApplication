@@ -10,6 +10,8 @@ import WebKit
 
 class TwitchChatLoginViewController: UIViewController {
     @IBOutlet var loginButton: UIButton!
+    @IBOutlet var label: UILabel!
+    var accessToken: String!
     
     func initLoginButton() {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
@@ -30,6 +32,10 @@ class TwitchChatLoginViewController: UIViewController {
         self.view.addSubview(button)
         self.loginButton = button
         self.view.addConstraints([horizontalConstraint, verticalConstraint])
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
+        self.label = label
+        self.view.addSubview(label)
     }
     
     func initWebView(_ url: URLRequest) {
@@ -44,7 +50,7 @@ class TwitchChatLoginViewController: UIViewController {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         
         webView.backgroundColor = UIColor.black
-        webView.navigationDelegate = self
+        //webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
 
         let horizontalConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
@@ -62,9 +68,11 @@ class TwitchChatLoginViewController: UIViewController {
     
     @IBAction func loginButtonTouched(){
         let loginRequest = TwitchChatLogin()
-        /*loginRequest.delegate = self
-        loginRequest.oAuthRequest()*/
-        initWebView(loginRequest.getRequset())
+        let vc = WebAuthViewController()
+        vc.delegate = self
+        vc.URLRequest = loginRequest.getRequset()
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -87,36 +95,11 @@ class TwitchChatLoginViewController: UIViewController {
 
 }
 
-extension TwitchChatLoginViewController: TwitchChatLoginDelegate {
-    func OnMessage(_ data: Data) {
-        let newString = String(data: data, encoding: .utf8)!
-        print(newString)
-        //self.initWebView(newString)
-    }
-}
 
-
-
-extension TwitchChatLoginViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("captured starting")
-    }
-    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        print("captured redirect")
-    }
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if navigationAction.navigationType == .other {
-            if let url = navigationAction.request.url {
-                guard let accessToken = url["access_token"] else {
-                    decisionHandler(.allow)
-                    return
-                }
-                print(accessToken)
-                decisionHandler(.cancel)
-                return
-            }
-        }
-        print("captured")
-        decisionHandler(.allow)
+extension TwitchChatLoginViewController: WebAuthViewDelegate {
+    func AccessTokenDidGet(_ acessToken: String) {
+        self.accessToken = acessToken
+        label.text = acessToken
+        //print("TwitchChatLoginViewContorller \(acessToken)")
     }
 }

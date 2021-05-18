@@ -8,6 +8,10 @@
 import UIKit
 import WebKit
 
+protocol WebAuthViewDelegate {
+    func AccessTokenDidGet(_ acessToken: String)
+}
+
 class WebAuthViewController: UIViewController {
 
     private let webView: WKWebView = {
@@ -24,6 +28,8 @@ class WebAuthViewController: UIViewController {
     
     var URLRequest: URLRequest?
     
+    var delegate: WebAuthViewDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,10 +37,31 @@ class WebAuthViewController: UIViewController {
 
         view.backgroundColor = .systemBackground
         view.addSubview(webView)
+        webView.navigationDelegate = self
+        webView.frame = view.bounds
         guard (webView.load(URLRequest!) != nil) else {
             dismiss(animated: true, completion: nil)
             return
         }
+    }
+}
+
+extension WebAuthViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if navigationAction.navigationType == .other {
+            if let url = navigationAction.request.url {
+                guard let accessToken = url["access_token"] else {
+                    decisionHandler(.allow)
+                    return
+                }
+                //print(accessToken)
+                delegate?.AccessTokenDidGet(accessToken)
+                decisionHandler(.cancel)
+                return
+            }
+        }
+        print("captured")
+        decisionHandler(.allow)
     }
 }
 
