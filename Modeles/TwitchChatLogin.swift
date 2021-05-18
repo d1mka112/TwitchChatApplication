@@ -7,6 +7,11 @@
 
 import Foundation
 
+protocol TwitchChatLoginDelegate
+{
+    func OnMessage(_ data: Data)
+}
+
 //TODO semaphore!!!
 class TwitchChatLogin {
     var mainUrlString = "https://id.twitch.tv/oauth2/authorize"
@@ -17,9 +22,13 @@ class TwitchChatLogin {
         "response_type": "token",
         "scope" : "chat:read+chat:edit+channel:moderate+whispers:read+whispers:edit+channel_editor"
     ]
+    var delegate: TwitchChatLoginDelegate?
+    
+    
+    var data: Data
     
     init() {
-
+        self.data = Data()
     }
     
     func oAuthRequest () {
@@ -43,7 +52,8 @@ class TwitchChatLogin {
                 print(String(describing: error))
                 return
             }
-            print(String(data: data, encoding: .utf8)!)
+            self.data = data
+            self.delegate?.OnMessage(data)
         }
 
         task.resume()

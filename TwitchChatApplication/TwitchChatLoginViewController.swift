@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WebKit
 
 class TwitchChatLoginViewController: UIViewController {
     @IBOutlet var loginButton: UIButton!
@@ -22,6 +23,7 @@ class TwitchChatLoginViewController: UIViewController {
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         
+        
         let horizontalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
         let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
         
@@ -30,8 +32,15 @@ class TwitchChatLoginViewController: UIViewController {
         self.view.addConstraints([horizontalConstraint, verticalConstraint])
     }
     
+    func initWebView(_ string: String) {
+        let webView = WKWebView()
+        webView.loadHTMLString(string, baseURL: nil)
+    }
+    
     @IBAction func loginButtonTouched(){
-        
+        let loginRequest = TwitchChatLogin()
+        loginRequest.delegate = self
+        loginRequest.oAuthRequest()
     }
     
     override func viewDidLoad() {
@@ -52,4 +61,11 @@ class TwitchChatLoginViewController: UIViewController {
     }
     */
 
+}
+
+extension TwitchChatLoginViewController: TwitchChatLoginDelegate {
+    func OnMessage(_ data: Data) {
+        let newString = String(data: data, encoding: .utf8)!
+        self.initWebView(newString)
+    }
 }
