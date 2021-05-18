@@ -18,7 +18,7 @@ class TwitchChatLogin {
     
     let requestParameters: [String : String] = [
         "client_id" : "63xnlr28umdtqdi5sys8i15nkk87ot",
-        "redirect_uri" : "https://localhost/",
+        "redirect_uri" : "https://www.twitch.tv",
         "response_type": "token",
         "scope" : "chat:read+chat:edit+channel:moderate+whispers:read+whispers:edit+channel_editor"
     ]

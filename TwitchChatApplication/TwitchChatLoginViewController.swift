@@ -34,20 +34,29 @@ class TwitchChatLoginViewController: UIViewController {
     
     func initWebView(_ url: URLRequest) {
         //DispatchQueue.main.async {
-            let webView = WKWebView()
-            webView.backgroundColor = UIColor.black
-            
-            webView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        let preferences = WKWebpagePreferences()
+        preferences.allowsContentJavaScript = true
+        let configuration = WKWebViewConfiguration()
+        configuration.defaultWebpagePreferences = preferences
+        
+        let webView = WKWebView(frame: .zero, configuration: configuration)
+        
+        webView.backgroundColor = UIColor.black
+        webView.navigationDelegate = self
+        webView.translatesAutoresizingMaskIntoConstraints = false
 
-            let horizontalConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-            let verticalConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
-            let widthConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
-            let heightConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.height, multiplier: 0.5, constant: 0)
-            self.view.addSubview(webView)
-            self.view.addConstraints([horizontalConstraint, verticalConstraint, heightConstraint, widthConstraint])
+        let horizontalConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+        let verticalConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
+        let widthConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
+        let heightConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.height, multiplier: 0.5, constant: 0)
             
-            webView.load(url)
-            webView.sizeToFit()            
+        self.view.addSubview(webView)
+        self.view.addConstraints([horizontalConstraint, verticalConstraint, heightConstraint, widthConstraint])
+            
+        webView.load(url)
+        webView.sizeToFit()
         //}
     }
     
@@ -89,12 +98,39 @@ extension TwitchChatLoginViewController: TwitchChatLoginDelegate {
 extension URL {
     subscript(queryParam:String) -> String? {
         guard let url = URLComponents(string: self.absoluteString) else { return nil }
-        return url.queryItems?.first(where: { $0.name == queryParam })?.value
+        if let parameters = url.queryItems {
+            return parameters.first(where: { $0.name == queryParam })?.value
+        } else if let paramsPairs = url.fragment?.components(separatedBy: "?").last?.components(separatedBy: "&") {
+            for pair in paramsPairs where pair.contains(queryParam) {
+                return pair.components(separatedBy: "=").last
+            }
+            return nil
+        } else {
+            return nil
+        }
     }
 }
 
 extension TwitchChatLoginViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        print("captured starting")
+    }
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        
+        print("captured redirect")
+    }
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if navigationAction.navigationType == .other {
+            if let url = navigationAction.request.url {
+                guard let accessToken = url["access_token"] else {
+                    decisionHandler(.allow)
+                    return
+                }
+                print(accessToken)
+                decisionHandler(.cancel)
+                return
+            }
+        }
+        print("captured")
+        decisionHandler(.allow)
     }
 }
