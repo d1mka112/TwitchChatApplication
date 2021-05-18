@@ -53,8 +53,8 @@ extension WebAuthViewController: WKNavigationDelegate {
             guard let accessToken = url["access_token"] else {
                 return
             }
-            delegate?.AccessTokenDidGet(accessToken)
             dismiss(animated: true, completion: nil)
+            delegate?.AccessTokenDidGet("oauth:\(accessToken)")
             return
         }
     }

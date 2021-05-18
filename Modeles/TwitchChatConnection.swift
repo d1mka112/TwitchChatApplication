@@ -42,7 +42,7 @@ struct TwitchChatMessage {
 class TwitchChatConnection {
     
     var nickname: String = "d1mka112"
-    var token: String = "oauth:vidoa3bbaf7l29rzdyob2bd1cak7on"
+    var token: String = "oauth:"
     
     var channel: String = ""
     
