@@ -63,7 +63,7 @@ class TwitchChatConnection {
     
     func connectToTheServer() {
         webSocketTask.resume()
-        self.sendMessage("PASS \(token)")
+        self.sendMessage("PASS oauth:\(token)")
         self.sendMessage("NICK \(nickname.lowercased())")
     }
     func connectToTheChatChannel(into channel: String) {

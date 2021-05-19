@@ -20,7 +20,7 @@ class TwitchChatLogin {
         "client_id" : "63xnlr28umdtqdi5sys8i15nkk87ot",
         "redirect_uri" : "https://www.twitch.tv",
         "response_type": "token",
-        "scope" : "chat:read+chat:edit+channel:moderate+whispers:read+whispers:edit+channel_editor"
+        "scope" : "user_read+chat:read+chat:edit+channel:moderate+whispers:read+whispers:edit+channel_editor"
     ]
     var delegate: TwitchChatLoginDelegate?
     
@@ -47,6 +47,35 @@ class TwitchChatLogin {
         return Request
     }
     
+    func getUserObject(oauth: String) {
+        guard let mainUrl = URL(string: "https://api.twitch.tv/kraken/user") else {
+            return
+        }
+        guard let clientId = requestParameters["client_id"] else {
+            return
+        }
+        
+        var Request = URLRequest(url: mainUrl)
+        
+        Request.httpMethod = "GET"
+        
+        Request.addValue("application/vnd.twitchtv.v5+json", forHTTPHeaderField: "Accept")
+        Request.addValue(clientId, forHTTPHeaderField: "Client-ID")
+        Request.addValue("OAuth \(oauth)", forHTTPHeaderField: "Authorization")
+    
+        let task = URLSession.shared.dataTask(with: Request) { (data, response, error) in
+            guard let data = data else {
+                print(String(describing: error))
+                return
+            }
+            self.data = data
+            self.delegate?.OnMessage(data)
+        }
+
+        task.resume()
+        return
+    }
+    
     func oAuthRequest () {
         
         var parameters = "?"
@@ -55,8 +84,7 @@ class TwitchChatLogin {
             parameters += "\(key)=\(requestParameters[key]!)&"
         }
         
-        guard let mainUrl = URL(string: mainUrlString+parameters)
-        else {
+        guard let mainUrl = URL(string: mainUrlString+parameters) else {
             return
         }
         var Request = URLRequest(url: mainUrl)
@@ -77,8 +105,3 @@ class TwitchChatLogin {
     }
     
 }
-
-/*
-let twitchOAuth = TwitchChatLogin()
-twitchOAuth.oAuthRequest()
-*/

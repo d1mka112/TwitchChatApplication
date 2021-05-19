@@ -47,6 +47,9 @@ class WebAuthViewController: UIViewController {
 }
 
 extension WebAuthViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print(String(describing: error))
+    }
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         print("captured redirect")
         if let url = webView.url  {
@@ -54,7 +57,7 @@ extension WebAuthViewController: WKNavigationDelegate {
                 return
             }
             dismiss(animated: true, completion: nil)
-            delegate?.AccessTokenDidGet("oauth:\(accessToken)")
+            delegate?.AccessTokenDidGet(accessToken)
             return
         }
     }

@@ -11,6 +11,9 @@ import WebKit
 class TwitchChatLoginViewController: UIViewController {
     @IBOutlet var loginButton: UIButton!
     @IBOutlet var label: UILabel!
+    
+    private var nextViewController: TwitchChannelChatViewController!
+    
     var accessToken: String!
     
     func initLoginButton() {
@@ -34,6 +37,7 @@ class TwitchChatLoginViewController: UIViewController {
         self.view.addConstraints([horizontalConstraint, verticalConstraint])
         
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
+        label.numberOfLines = 0
         self.label = label
         self.view.addSubview(label)
     }
@@ -95,17 +99,37 @@ class TwitchChatLoginViewController: UIViewController {
 
 }
 
-
 extension TwitchChatLoginViewController: WebAuthViewDelegate {
     func AccessTokenDidGet(_ acessToken: String) {
         self.accessToken = acessToken
-        label.text = acessToken
-        // TODO: Fix the problem of memory overflow!!!
         
-        let vc = TwitchChannelChatViewController()
-        vc.accessToken = acessToken
-        //self.navigationController?.pushViewController(vc, animated: true)
-        present(vc, animated: true, completion: nil)
-        //print("TwitchChatLoginViewContorller \(acessToken)")
+        let login = TwitchChatLogin()
+        login.delegate = self
+        login.getUserObject(oauth: acessToken)
+        label.text = acessToken
+        print(acessToken)
+        
+        // TODO: Fix the problem of memory overflow!!!
+        /*
+        if self.nextViewController == nil {
+            self.nextViewController = TwitchChannelChatViewController()
+        }
+        self.nextViewController.accessToken = acessToken
+        self.navigationController?.pushViewController(self.nextViewController, animated: true)
+        present(nextViewController, animated: true, completion: nil)
+        //print("TwitchChatLoginViewContorller \(acessToken)")*/
+    }
+}
+extension TwitchChatLoginViewController: TwitchChatLoginDelegate {
+    func OnMessage(_ data: Data) {
+        let str = String(decoding: data, as: UTF8.self)
+        
+        if str.isEmpty {
+            print("Data is Empty")
+            return
+        }
+        DispatchQueue.main.async {
+            self.label.text! += "\n\(str)"
+        }
     }
 }
