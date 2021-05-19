@@ -7,9 +7,12 @@
 
 import Foundation
 
+
+
 protocol TwitchChatLoginDelegate
 {
     func OnMessage(_ data: Data)
+    func OnUserData(_ data: String)
 }
 
 //TODO semaphore!!!
