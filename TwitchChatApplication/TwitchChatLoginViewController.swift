@@ -10,26 +10,38 @@ import WebKit
 
 class TwitchChatLoginViewController: UIViewController {
     @IBOutlet var loginButton: UIButton!
+    @IBOutlet var label: UILabel!
+    
+    private var nextViewController: TwitchChannelChatViewController!
+    
+    var accessToken: String!
     
     func initLoginButton() {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
         
         button.addTarget(self, action: #selector(loginButtonTouched), for: UIControl.Event.touchUpInside)
         button.setTitle("Login", for: .normal)
-        button.backgroundColor = .purple
+        button.backgroundColor = .systemPink
         button.setTitleColor(UIColor.white, for: .normal)
         button.setTitleColor(UIColor.gray, for: .highlighted)
         
-        button.layer.cornerRadius = 10
+        //button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         
         
         let horizontalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
         let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
+        let heightConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 50)
+        let widthConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
         
         self.view.addSubview(button)
         self.loginButton = button
-        self.view.addConstraints([horizontalConstraint, verticalConstraint])
+        self.view.addConstraints([horizontalConstraint, verticalConstraint, heightConstraint, widthConstraint])
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
+        label.numberOfLines = 0
+        self.label = label
+        self.view.addSubview(label)
     }
     
     func initWebView(_ url: URLRequest) {
@@ -44,7 +56,7 @@ class TwitchChatLoginViewController: UIViewController {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         
         webView.backgroundColor = UIColor.black
-        webView.navigationDelegate = self
+        //webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
 
         let horizontalConstraint = NSLayoutConstraint(item: webView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
@@ -62,9 +74,11 @@ class TwitchChatLoginViewController: UIViewController {
     
     @IBAction func loginButtonTouched(){
         let loginRequest = TwitchChatLogin()
-        /*loginRequest.delegate = self
-        loginRequest.oAuthRequest()*/
-        initWebView(loginRequest.getRequset())
+        let vc = WebAuthViewController()
+        vc.delegate = self
+        vc.URLRequest = loginRequest.getRequset()
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -87,50 +101,41 @@ class TwitchChatLoginViewController: UIViewController {
 
 }
 
+extension TwitchChatLoginViewController: WebAuthViewDelegate {
+    func AccessTokenDidGet(_ acessToken: String) {
+        self.accessToken = acessToken
+        
+        let login = TwitchChatLogin()
+        login.delegate = self
+        login.getUserObject(oauth: acessToken)
+        label.text = acessToken
+        print(acessToken)
+    }
+}
 extension TwitchChatLoginViewController: TwitchChatLoginDelegate {
+    func OnUserData(_ data: UserInfo) {
+        DispatchQueue.main.async {
+            self.label.text! += "\n\(data.name)"
+            
+            // TODO: Fix the problem of memory overflow!!!
+            
+            if self.nextViewController == nil {
+                self.nextViewController = TwitchChannelChatViewController()
+            }
+            self.nextViewController.accessToken = self.accessToken
+            self.nextViewController.userInfo = data
+            //self.navigationController?.pushViewController(self.nextViewController, animated: true)
+            self.present(self.nextViewController, animated: true, completion: nil)
+            //print("TwitchChatLoginViewContorller \(acessToken)")
+        }
+    }
+    
     func OnMessage(_ data: Data) {
-        let newString = String(data: data, encoding: .utf8)!
-        print(newString)
-        //self.initWebView(newString)
-    }
-}
-
-extension URL {
-    subscript(queryParam:String) -> String? {
-        guard let url = URLComponents(string: self.absoluteString) else { return nil }
-        if let parameters = url.queryItems {
-            return parameters.first(where: { $0.name == queryParam })?.value
-        } else if let paramsPairs = url.fragment?.components(separatedBy: "?").last?.components(separatedBy: "&") {
-            for pair in paramsPairs where pair.contains(queryParam) {
-                return pair.components(separatedBy: "=").last
-            }
-            return nil
-        } else {
-            return nil
+        let str = String(decoding: data, as: UTF8.self)
+        
+        if str.isEmpty {
+            print("Data is Empty")
+            return
         }
-    }
-}
-
-extension TwitchChatLoginViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("captured starting")
-    }
-    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        print("captured redirect")
-    }
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if navigationAction.navigationType == .other {
-            if let url = navigationAction.request.url {
-                guard let accessToken = url["access_token"] else {
-                    decisionHandler(.allow)
-                    return
-                }
-                print(accessToken)
-                decisionHandler(.cancel)
-                return
-            }
-        }
-        print("captured")
-        decisionHandler(.allow)
     }
 }

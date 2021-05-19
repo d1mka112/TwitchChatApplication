@@ -19,7 +19,11 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     
     var twitchChat: TwitchChatConnection!
     
-    var channelName = "lana_lux"
+    var accessToken: String!
+    
+    var userInfo: UserInfo!
+    
+    var channelName = "fruktozka"
     
     @IBAction func listeningButtonTouched() {
         if self.twitchChat.willRead {
@@ -119,11 +123,15 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         initChannelNameLabelConstraints()
 
         twitchChat = TwitchChatConnection()
+        twitchChat.token = self.accessToken
+        twitchChat.nickname = self.userInfo.displayName
         twitchChat.delegate = self
 
         twitchChat.connectToTheServer()
         twitchChat.connectToTheChatChannel(into: channelName)
         twitchChat.startListening()
+        
+        view.backgroundColor = .white
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

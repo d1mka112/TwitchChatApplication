@@ -41,8 +41,8 @@ struct TwitchChatMessage {
 
 class TwitchChatConnection {
     
-    var nickname: String = "d1mka112"
-    var token: String = "oauth:vidoa3bbaf7l29rzdyob2bd1cak7on"
+    var nickname: String = ""
+    var token: String = "oauth:"
     
     var channel: String = ""
     
@@ -63,7 +63,7 @@ class TwitchChatConnection {
     
     func connectToTheServer() {
         webSocketTask.resume()
-        self.sendMessage("PASS \(token)")
+        self.sendMessage("PASS oauth:\(token)")
         self.sendMessage("NICK \(nickname.lowercased())")
     }
     func connectToTheChatChannel(into channel: String) {
