@@ -12,7 +12,7 @@ import Foundation
 protocol TwitchChatLoginDelegate
 {
     func OnMessage(_ data: Data)
-    func OnUserData(_ data: String)
+    func OnUserData(_ data: UserInfo)
 }
 
 //TODO semaphore!!!
@@ -72,7 +72,10 @@ class TwitchChatLogin {
                 return
             }
             self.data = data
-            self.delegate?.OnMessage(data)
+            print(String(decoding: data, as: UTF8.self))
+            let userInfo = try! JSONDecoder().decode(UserInfo.self, from: data)
+
+            self.delegate?.OnUserData(userInfo)
         }
 
         task.resume()

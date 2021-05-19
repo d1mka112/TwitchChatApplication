@@ -21,20 +21,22 @@ class TwitchChatLoginViewController: UIViewController {
         
         button.addTarget(self, action: #selector(loginButtonTouched), for: UIControl.Event.touchUpInside)
         button.setTitle("Login", for: .normal)
-        button.backgroundColor = .purple
+        button.backgroundColor = .systemPink
         button.setTitleColor(UIColor.white, for: .normal)
         button.setTitleColor(UIColor.gray, for: .highlighted)
         
-        button.layer.cornerRadius = 10
+        //button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         
         
         let horizontalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
         let verticalConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
+        let heightConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 50)
+        let widthConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
         
         self.view.addSubview(button)
         self.loginButton = button
-        self.view.addConstraints([horizontalConstraint, verticalConstraint])
+        self.view.addConstraints([horizontalConstraint, verticalConstraint, heightConstraint, widthConstraint])
         
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
         label.numberOfLines = 0
@@ -108,28 +110,32 @@ extension TwitchChatLoginViewController: WebAuthViewDelegate {
         login.getUserObject(oauth: acessToken)
         label.text = acessToken
         print(acessToken)
-        
-        // TODO: Fix the problem of memory overflow!!!
-        /*
-        if self.nextViewController == nil {
-            self.nextViewController = TwitchChannelChatViewController()
-        }
-        self.nextViewController.accessToken = acessToken
-        self.navigationController?.pushViewController(self.nextViewController, animated: true)
-        present(nextViewController, animated: true, completion: nil)
-        //print("TwitchChatLoginViewContorller \(acessToken)")*/
     }
 }
 extension TwitchChatLoginViewController: TwitchChatLoginDelegate {
+    func OnUserData(_ data: UserInfo) {
+        DispatchQueue.main.async {
+            self.label.text! += "\n\(data.name)"
+            
+            // TODO: Fix the problem of memory overflow!!!
+            
+            if self.nextViewController == nil {
+                self.nextViewController = TwitchChannelChatViewController()
+            }
+            self.nextViewController.accessToken = self.accessToken
+            self.nextViewController.userInfo = data
+            //self.navigationController?.pushViewController(self.nextViewController, animated: true)
+            self.present(self.nextViewController, animated: true, completion: nil)
+            //print("TwitchChatLoginViewContorller \(acessToken)")
+        }
+    }
+    
     func OnMessage(_ data: Data) {
         let str = String(decoding: data, as: UTF8.self)
         
         if str.isEmpty {
             print("Data is Empty")
             return
-        }
-        DispatchQueue.main.async {
-            self.label.text! += "\n\(str)"
         }
     }
 }

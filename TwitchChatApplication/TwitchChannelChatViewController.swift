@@ -21,7 +21,9 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     
     var accessToken: String!
     
-    var channelName = "des0ut"
+    var userInfo: UserInfo!
+    
+    var channelName = "fruktozka"
     
     @IBAction func listeningButtonTouched() {
         if self.twitchChat.willRead {
@@ -122,6 +124,7 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
 
         twitchChat = TwitchChatConnection()
         twitchChat.token = self.accessToken
+        twitchChat.nickname = self.userInfo.displayName
         twitchChat.delegate = self
 
         twitchChat.connectToTheServer()
