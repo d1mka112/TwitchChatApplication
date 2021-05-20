@@ -31,7 +31,7 @@ struct UserInfo: Decodable {
     var bio: String?
     var createdAt: String?
     var displayName: String
-    var email: String
+    var email: String?
     var emailVerified: Bool?
     var logo: String?
     var name: String
@@ -64,7 +64,7 @@ struct UserInfo: Decodable {
         self.bio? = try container.decode(String.self, forKey: .bio)
         self.createdAt? = try container.decode(String.self, forKey: .createdAt)
         self.displayName = try container.decode(String.self, forKey: .displayName)
-        self.email = try container.decode(String.self, forKey: .email)
+        self.email? = try container.decode(String.self, forKey: .email)
         self.emailVerified? = try container.decode(Bool.self, forKey: .emailVerified)
         self.logo? = try container.decode(String.self, forKey: .logo)
         self.name = try container.decode(String.self, forKey: .name)

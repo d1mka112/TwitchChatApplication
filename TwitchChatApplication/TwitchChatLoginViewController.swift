@@ -74,6 +74,7 @@ class TwitchChatLoginViewController: UIViewController {
     
     @IBAction func loginButtonTouched(){
         let loginRequest = TwitchChatLogin()
+        loginRequest.delegate = self
         let vc = WebAuthViewController()
         vc.delegate = self
         vc.URLRequest = loginRequest.getRequset()
@@ -127,6 +128,11 @@ extension TwitchChatLoginViewController: TwitchChatLoginDelegate {
             //self.navigationController?.pushViewController(self.nextViewController, animated: true)
             self.present(self.nextViewController, animated: true, completion: nil)
             //print("TwitchChatLoginViewContorller \(acessToken)")
+        }
+    }
+    func OnUsersData(_ data: UsersInfo) {
+        DispatchQueue.main.async {
+            print(data.total)
         }
     }
     

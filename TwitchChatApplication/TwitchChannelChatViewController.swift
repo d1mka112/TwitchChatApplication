@@ -23,7 +23,7 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
     
     var userInfo: UserInfo!
     
-    var channelName = "fruktozka"
+    var channelName = "gaechkatm"
     
     @IBAction func listeningButtonTouched() {
         if self.twitchChat.willRead {
@@ -130,6 +130,9 @@ class TwitchChannelChatViewController: UIViewController, UITextFieldDelegate, Tw
         twitchChat.connectToTheServer()
         twitchChat.connectToTheChatChannel(into: channelName)
         twitchChat.startListening()
+        
+        let login = TwitchChatLogin()
+        login.getUserObjectByChannelName(channel: channelName) //???
         
         view.backgroundColor = .white
     }
