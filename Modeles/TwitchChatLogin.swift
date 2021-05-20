@@ -13,6 +13,7 @@ protocol TwitchChatLoginDelegate
 {
     func OnMessage(_ data: Data)
     func OnUserData(_ data: UserInfo)
+    func OnUsersData(_ data: UsersInfo)
 }
 
 //TODO semaphore!!!
@@ -65,6 +66,67 @@ class TwitchChatLogin {
         Request.addValue("application/vnd.twitchtv.v5+json", forHTTPHeaderField: "Accept")
         Request.addValue(clientId, forHTTPHeaderField: "Client-ID")
         Request.addValue("OAuth \(oauth)", forHTTPHeaderField: "Authorization")
+    
+        let task = URLSession.shared.dataTask(with: Request) { (data, response, error) in
+            guard let data = data else {
+                print(String(describing: error))
+                return
+            }
+            self.data = data
+            print(String(decoding: data, as: UTF8.self))
+            let userInfo = try! JSONDecoder().decode(UserInfo.self, from: data)
+
+            self.delegate?.OnUserData(userInfo)
+        }
+
+        task.resume()
+        return
+    }
+    
+    func getUserObjectByChannelName(channel: String) {
+        guard let mainUrl = URL(string: "https://api.twitch.tv/kraken/users?login=\(channel)") else {
+            return
+        }
+        guard let clientId = requestParameters["client_id"] else {
+            return
+        }
+        
+        var Request = URLRequest(url: mainUrl)
+        
+        Request.httpMethod = "GET"
+        
+        Request.addValue("application/vnd.twitchtv.v5+json", forHTTPHeaderField: "Accept")
+        Request.addValue(clientId, forHTTPHeaderField: "Client-ID")
+    
+        let task = URLSession.shared.dataTask(with: Request) { (data, response, error) in
+            guard let data = data else {
+                print(String(describing: error))
+                return
+            }
+            self.data = data
+            //print(String(decoding: data, as: UTF8.self))
+            let userInfo = try! JSONDecoder().decode(UsersInfo.self, from: data)
+            self.delegate?.OnUsersData(userInfo)
+        }
+
+        task.resume()
+        return
+    }
+    
+    func getStreamBy(channelId: String) {
+        guard let mainUrl = URL(string: "https://api.twitch.tv/kraken/streams/\(channelId)") else {
+            return
+        }
+        guard let clientId = requestParameters["client_id"] else {
+            return
+        }
+        
+        var Request = URLRequest(url: mainUrl)
+        
+        Request.httpMethod = "GET"
+        
+        Request.addValue("application/vnd.twitchtv.v5+json", forHTTPHeaderField: "Accept")
+        Request.addValue(clientId, forHTTPHeaderField: "Client-ID")
     
         let task = URLSession.shared.dataTask(with: Request) { (data, response, error) in
             guard let data = data else {

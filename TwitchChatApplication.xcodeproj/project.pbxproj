@@ -10,6 +10,8 @@
 		041FDF07265470F60010C575 /* WebAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041FDF06265470F60010C575 /* WebAuthViewController.swift */; };
 		041FDF0A265471EA0010C575 /* URLExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041FDF09265471EA0010C575 /* URLExtension.swift */; };
 		0441EE292654FFD800098A53 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0441EE282654FFD800098A53 /* UserInfo.swift */; };
+		0441EE2C2655567E00098A53 /* StreamInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0441EE2B2655567E00098A53 /* StreamInfo.swift */; };
+		0441EE2F26556A8100098A53 /* UsersInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0441EE2E26556A8100098A53 /* UsersInfo.swift */; };
 		048A14F9263466EE00F25A80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A14F8263466EE00F25A80 /* AppDelegate.swift */; };
 		048A14FB263466EE00F25A80 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A14FA263466EE00F25A80 /* SceneDelegate.swift */; };
 		048A14FD263466EE00F25A80 /* TwitchChannelChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048A14FC263466EE00F25A80 /* TwitchChannelChatViewController.swift */; };
@@ -25,6 +27,8 @@
 		041FDF06265470F60010C575 /* WebAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthViewController.swift; sourceTree = "<group>"; };
 		041FDF09265471EA0010C575 /* URLExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtension.swift; sourceTree = "<group>"; };
 		0441EE282654FFD800098A53 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		0441EE2B2655567E00098A53 /* StreamInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamInfo.swift; sourceTree = "<group>"; };
+		0441EE2E26556A8100098A53 /* UsersInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersInfo.swift; sourceTree = "<group>"; };
 		048A14F5263466EE00F25A80 /* TwitchChatApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitchChatApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		048A14F8263466EE00F25A80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		048A14FA263466EE00F25A80 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -89,6 +93,8 @@
 				048A150E263469B600F25A80 /* TwitchChatConnection.swift */,
 				04D8BD1F26445D1600D8EE56 /* TwitchChatLogin.swift */,
 				0441EE282654FFD800098A53 /* UserInfo.swift */,
+				0441EE2B2655567E00098A53 /* StreamInfo.swift */,
+				0441EE2E26556A8100098A53 /* UsersInfo.swift */,
 			);
 			path = Modeles;
 			sourceTree = "<group>";
@@ -163,11 +169,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0441EE2F26556A8100098A53 /* UsersInfo.swift in Sources */,
 				04D8BD2026445D1600D8EE56 /* TwitchChatLogin.swift in Sources */,
 				048A14FD263466EE00F25A80 /* TwitchChannelChatViewController.swift in Sources */,
 				048A14F9263466EE00F25A80 /* AppDelegate.swift in Sources */,
 				041FDF07265470F60010C575 /* WebAuthViewController.swift in Sources */,
 				048A150F263469B600F25A80 /* TwitchChatConnection.swift in Sources */,
+				0441EE2C2655567E00098A53 /* StreamInfo.swift in Sources */,
 				041FDF0A265471EA0010C575 /* URLExtension.swift in Sources */,
 				04D8BD1D26445D0800D8EE56 /* TwitchChatLoginViewController.swift in Sources */,
 				0441EE292654FFD800098A53 /* UserInfo.swift in Sources */,
