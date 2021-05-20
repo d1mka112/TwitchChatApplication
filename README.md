@@ -9,6 +9,15 @@ This app is designed to reduce battery power and cellular data requirements.
 
 Here you can see the twitch user authorization and automatic connection to the chat (the chat was hard-coded yet) =)
 
+All layout of UIElements was coded programmatically
+
 ![](images/intro.gif)
 
-All layout of UIElements was coded programmatically
+---
+
+### Screenshot of chat on browser and application
+
+![](images/chatExample.png)
+
+
+
